@@ -3,7 +3,9 @@
     <div class="thread">
       <div>
         <p>
-          <a href="#">{{thread.title}}}</a>
+          <router-link :to="{name: 'ThreadShow', params: {id: thread['.key']}}">
+            {{thread.title}}
+          </router-link>
         </p>
         <p class="text-faded text-xsmall">
           By
