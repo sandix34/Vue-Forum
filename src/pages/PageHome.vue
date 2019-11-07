@@ -7,12 +7,11 @@
 
 <script>
 
-import ThreadList from './ThreadList'
+import ThreadList from '@/components/ThreadList'
 import sourceData from '@/data'
 console.log(sourceData)
 
 export default {
-  name: 'HelloWorld',
   data () {
     return {
       threads: Object.values(sourceData.threads),
