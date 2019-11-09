@@ -11,7 +11,7 @@
       <div class="post-content">
         <div>{{post.text}}</div>
       </div>
-      <div class="post-date text-faded">{{post.publisheAt}}</div>
+      <div class="post-date text-faded">{{post.publisheAt | formatDate}}</div>
     </div>
   </div>
 </template>
@@ -19,6 +19,7 @@
 <script>
 
 import sourceData from '@/data'
+import moment from 'moment'
 
 export default {
   props: {
@@ -33,6 +34,11 @@ export default {
     },
     userPostCount () {
       return Object.keys(this.user.posts).length
+    }
+  },
+  filters: {
+    formatDate (date) {
+      return moment.unix(date).format('MMMM Do YYYY, h:mm:ss a')
     }
   }
 }
