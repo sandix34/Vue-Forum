@@ -11,7 +11,7 @@ import moment from 'moment'
 export default {
   props: {
     timestamp: {
-      reuired: true,
+      required: true,
       type: Number
     }
   },
