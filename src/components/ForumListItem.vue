@@ -23,7 +23,7 @@ export default {
   props: {
     forum: {
       required: true,
-      type: Number
+      type: Object
     }
   },
   computed: {
