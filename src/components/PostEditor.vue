@@ -34,7 +34,7 @@
 
         const post = {
           text: this.text,
-          publisheAt: Math.floor(Date.now() / 1000),
+          publishedAt: Math.floor(Date.now() / 1000),
           threadId: this.threadId,
           userId: '7uVPJS9GHoftN58Z2MXCYDqmNAh2',
           '.key': postId
