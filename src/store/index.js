@@ -8,7 +8,15 @@ Vue.use(Vuex)
 
 // export the Vuex store
 export default new Vuex.Store({
-  state: sourceData,
+  state: {
+    ...sourceData,
+    authId: 'HJNTR1nN8tgbB148RJrPYbby8Vl1'
+  },
+  getters: {
+    authUser (state) {
+      return state.users[state.authId]
+    }
+  },
   actions: {
     createPost (context, post) {
       const postId = 'greatPost' + Math.random()
