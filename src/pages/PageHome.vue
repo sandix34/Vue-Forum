@@ -8,13 +8,11 @@
 <script>
 
 import CategoryList from '@/components/CategoryList'
-import sourceData from '@/data'
-console.log(sourceData)
 
 export default {
-  data () {
-    return {
-      categories: Object.values(sourceData.categories)
+  computed: {
+    categories () {
+      return Object.values(this.$store.state.categories)
     }
   },
   components: {
