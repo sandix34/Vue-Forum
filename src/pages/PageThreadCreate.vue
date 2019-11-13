@@ -40,8 +40,13 @@
         }
       },
       methods: {
-        save () {
+         save () {
           // dispatch action
+          this.$store.dispatch('createThread', {
+            forumId: this.forum['.key'],
+            title: this.title,
+            text: this.text
+          })
         }
       }
     }
