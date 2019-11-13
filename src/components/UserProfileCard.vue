@@ -24,7 +24,12 @@
     <p class="text-xsmall text-faded text-center">Member since june 2003, last visited 4 hours ago</p>
     <div class="text-center">
       <hr />
-      <a href="edit-profile.html" class="btn-green btn-small">Edit Profile</a>
+      <router-link
+        :to="{name: 'ProfileEdit'}"
+        class="btn-green btn-small"
+      >
+        Edit Profile
+      </router-link>
     </div>
   </div>
 </template>
