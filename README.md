@@ -1,5 +1,5 @@
-# ![In Progress][In Progress] Vue-Forum (projet en cours)
-[In Progress]: https://user-images.githubusercontent.com/29199184/34462881-7305ddac-ee4d-11e7-9b57-589424820da4.png "In Progress"
+#  Vue-Forum ![In Progress][In Progress]
+[In Progress]: https://user-images.githubusercontent.com/44428775/68836196-15581800-06ba-11ea-8f02-90895ca6e0c4.jpg "In Progress"
 
 Apprentissage de Vuejs en créant un forum complet à partir de rien avec [le Cours de maître Vue.js](https://vueschool.io/courses) proposé par [Vue School](https://vueschool.io/) (cours vidéo sous-titré en Anglais :uk: ou Espagnol :es:) 
 
