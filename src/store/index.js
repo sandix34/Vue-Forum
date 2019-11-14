@@ -28,24 +28,31 @@ export default new Vuex.Store({
       commit('APPEND_POST_TO_USER', {userId: post.userId, postId})
       return Promise.resolve(state.posts[postId])
     },
-    updateThread ({state, commit}, {title, text, id}) {
+    updateThread ({state, commit, dispatch}, {title, text, id}) {
       return new Promise((resolve, reject) => {
         const thread = state.threads[id]
-        const post = state.posts[thread.firstPostId]
-
         const newThread = {...thread, title}
-        const newPost = {...post, text}
-
         commit('SET_THREAD', {thread: newThread, threadId: id})
-        commit('SET_POST', {post: newPost, postId: thread.firstPostId})
-
-        resolve(newThread)
+        dispatch('updatePost', {id: thread.firstPostId, text})
+          .then(() => {
+            resolve(newThread)
+          })
       })
     },
     updatePost ({state, commit}, {id, text}) {
       return new Promise((resolve, reject) => {
         const post = state.posts[id]
-        commit('SET_POST', {postId: id, post: {...post, text}})
+        commit('SET_POST', {
+          postId: id,
+          post: {
+            ...post,
+            text
+          },
+          edited: {
+            at: Math.floor(Date.now() / 1000),
+            by: state.authId
+          }
+        })
         resolve(post)
       })
     },
