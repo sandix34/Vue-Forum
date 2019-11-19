@@ -1,5 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import firebase from 'firebase/app'
+import 'firebase/database'
 import {countObjectProperties} from '@/utils'
 
 // install Vuex plugin
@@ -100,6 +102,36 @@ export default new Vuex.Store({
             commit('SET_THREAD', {threadId, thread: {...thread, firstPostId: post['.key']}})
           })
         resolve(state.threads[threadId])
+      })
+    },
+    fetchThread ({state, commit}, {id}) {
+      console.log('🔥 📄', id)
+      return new Promise((resolve, reject) => {
+        firebase.database().ref('threads').child(id).once('value', snapshot => {
+          const thread = snapshot.val()
+          commit('SET_THREAD', {threadId: snapshot.key, thread: {...thread, '.key': snapshot.key}})
+          resolve(state.threads[id])
+        })
+      })
+    },
+    fetchUser ({state, commit}, {id}) {
+      console.log('🔥 🙋‍', id)
+      return new Promise((resolve, reject) => {
+        firebase.database().ref('users').child(id).once('value', snapshot => {
+          const user = snapshot.val()
+          commit('SET_USER', {userId: snapshot.key, user: {...user, '.key': snapshot.key}})
+          resolve(state.users[id])
+        })
+      })
+    },
+    fetchPost ({state, commit}, {id}) {
+      console.log('🔥 💬‍', id)
+      return new Promise((resolve, reject) => {
+        firebase.database().ref('posts').child(id).once('value', snapshot => {
+          const post = snapshot.val()
+          commit('SET_POST', {postId: snapshot.key, post: {...post, '.key': snapshot.key}})
+          resolve(state.posts[id])
+        })
       })
     }
   },
