@@ -113,6 +113,9 @@ export default new Vuex.Store({
     fetchPost ({dispatch}, {id}) {
       return dispatch('fetchItem', {resource: 'posts', id, emoji: '💬'})
     },
+    fetchPosts ({dispatch}, {ids}) {
+      return dispatch('fetchItems', {resource: 'posts', emoji: 'chat', ids})
+    },
     // reusable fetchItem action
     fetchItem ({state, commit}, {id, emoji, resource}) {
       console.log('🔥', emoji, id)
@@ -122,6 +125,9 @@ export default new Vuex.Store({
           resolve(state[resource][id])
         })
       })
+    },
+    fetchItems ({dispatch}, {ids, emoji, resource}) {
+      return Promise.all(ids.map(id => this.dispatch('fetchItem', {id, resource, emoji})))
     }
   },
   mutations: {
