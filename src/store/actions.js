@@ -52,21 +52,35 @@ export default {
   },
   createThread ({state, commit, dispatch}, {text, title, forumId}) {
     return new Promise((resolve, reject) => {
-      const threadId = 'greatThread' + Math.random()
+      const threadId = firebase.database().ref('threads').push().key
+      const postId = firebase.database().ref('posts').push().key
       const userId = state.authId
       const publishedAt = Math.floor(Date.now() / 1000)
 
-      const thread = {'.key': threadId, title, forumId, publishedAt, userId}
+      const thread = {title, forumId, publishedAt, userId, firstPostId: postId, posts: {}}
+      thread.posts[postId] = postId
+      const post = {text, publishedAt, threadId, userId}
 
-      commit('SET_THREAD', {threadId, thread})
-      commit('APPEND_THREAD_TO_FORUM', {parentId: forumId, childId: threadId})
-      commit('APPEND_THREAD_TO_USER', {parentId: userId, childId: threadId})
+      const updates = {}
+      updates[`threads/${threadId}`] = thread
+      updates[`forums/${forumId}/threads/${threadId}`] = threadId
+      updates[`users/${userId}/threads/${threadId}`] = threadId
 
-      dispatch('createPost', {text, threadId})
-        .then(post => {
-          commit('SET_THREAD', {threadId, thread: {...thread, firstPostId: post['.key']}})
+      updates[`posts/${postId}`] = post
+      updates[`users/${userId}/posts/${postId}`] = postId
+      firebase.database().ref().update(updates)
+        .then(() => {
+          // update thread
+          commit('SET_ITEM', {resource: 'threads', id: threadId, item: thread})
+          commit('APPEND_THREAD_TO_FORUM', {parentId: forumId, childId: threadId})
+          commit('APPEND_THREAD_TO_USER', {parentId: userId, childId: threadId})
+          // update post
+          commit('SET_ITEM', {resource: 'posts', item: post, id: postId})
+          commit('APPEND_POST_TO_THREAD', {parentId: post.threadId, childId: postId})
+          commit('APPEND_POST_TO_USER', {parentId: post.userId, childId: postId})
+
+          resolve(state.threads[threadId])
         })
-      resolve(state.threads[threadId])
     })
   },
   fetchCategory: ({dispatch}, {id}) => dispatch('fetchItem', {resource: 'categories', id, emoji: '🏷'}),
