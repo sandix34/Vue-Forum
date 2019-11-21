@@ -3,14 +3,21 @@ import 'firebase/database'
 
 export default {
   createPost ({commit, state}, post) {
-    const postId = 'greatPost' + Math.random()
-    post['.key'] = postId
+    const postId = firebase.database().ref('posts').push().key
     post.userId = state.authId
     post.publishedAt = Math.floor(Date.now() / 1000)
-    commit('SET_POST', {post, postId})
-    commit('APPEND_POST_TO_THREAD', {parentId: post.threadId, childId: postId})
-    commit('APPEND_POST_TO_USER', {parentId: post.userId, childId: postId})
-    return Promise.resolve(state.posts[postId])
+
+    const updates = {}
+    updates[`posts/${postId}`] = post
+    updates[`threads/${post.threadId}/posts/${postId}`] = postId
+    updates[`users/${post.userId}/posts/${postId}`] = postId
+    firebase.database().ref().update(updates)
+      .then(() => {
+        commit('SET_ITEM', {resource: 'posts', item: post, id: postId})
+        commit('APPEND_POST_TO_THREAD', {parentId: post.threadId, childId: postId})
+        commit('APPEND_POST_TO_USER', {parentId: post.userId, childId: postId})
+        return Promise.resolve(state.posts[postId])
+      })
   },
   updateThread ({state, commit, dispatch}, {title, text, id}) {
     return new Promise((resolve, reject) => {
