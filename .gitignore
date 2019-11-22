@@ -12,4 +12,5 @@ yarn-error.log*
 *.ntvs*
 *.njsproj
 *.sln
+*.env
 config/prod.env.js
