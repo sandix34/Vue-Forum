@@ -55,6 +55,9 @@
     methods: {
       register () {
         console.log(this.form)
+        this.$store.dispatch('createUser', this.form)
+          // When the call is done, redirect the userto the home page
+          .then(() => this.$router.push('/'))
       }
     },
     created () {
