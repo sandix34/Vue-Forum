@@ -1,27 +1,22 @@
 import firebase from 'firebase/app'
 import 'firebase/database'
+import 'firebase/auth'
 
 export default {
-  createUser ({state, commit}, {email, name, username, avatar = null}) {
+  createUser ({state, commit}, {id, email, name, username, avatar = null}) {
     return new Promise((resolve, reject) => {
       const registeredAt = Math.floor(Date.now() / 1000)
-      // in Firebase is a good practice to store the key properties in lowercase
       const usernameLower = username.toLowerCase()
-      // convert the email to lowercase before storing it
       email = email.toLowerCase()
-      // group together all the user properties in an object
       const user = {avatar, email, name, username, usernameLower, registeredAt}
-      // send it to Firebase
-      const userId = firebase.database().ref('users').push().key
-      firebase.database().ref('users').child(userId).set(user)
-        // When this is done, update the state
+      firebase.database().ref('users').child(id).set(user)
         .then(() => {
-          commit('SET_ITEM', {resource: 'users', id: userId, item: user})
-          // resolve the promise and pass in the fresh user object
-          resolve(state.users[userId])
+          commit('SET_ITEM', {resource: 'users', id: id, item: user})
+          resolve(state.users[id])
         })
     })
   },
+
   createPost ({commit, state}, post) {
     const postId = firebase.database().ref('posts').push().key
     post.userId = state.authId
@@ -39,6 +34,13 @@ export default {
         commit('APPEND_CONTRIBUTOR_TO_THREAD', {parentId: post.threadId, childId: post.userId})
         commit('APPEND_POST_TO_USER', {parentId: post.userId, childId: postId})
         return Promise.resolve(state.posts[postId])
+      })
+  },
+  registerUserWithEmailAndPassword ({dispatch}, {email, name, username, password, avatar = null}) {
+    return firebase.auth().createUserWithEmailAndPassword(email, password)
+      .then(user => {
+        console.log(user)
+        return dispatch('createUser', {id: user.user.uid, email, name, username, password, avatar})
       })
   },
   updateThread ({state, commit, dispatch}, {title, text, id}) {

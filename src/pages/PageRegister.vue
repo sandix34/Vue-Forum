@@ -40,30 +40,29 @@
 </template>
 
 <script>
-  export default {
-    data () {
-      return {
-        form: {
-          name: null,
-          username: null,
-          email: null,
-          password: null,
-          avatar: null
-        }
+
+export default {
+  data () {
+    return {
+      form: {
+        name: null,
+        username: null,
+        email: null,
+        password: null,
+        avatar: null
       }
-    },
-    methods: {
-      register () {
-        console.log(this.form)
-        this.$store.dispatch('createUser', this.form)
-          // When the call is done, redirect the userto the home page
-          .then(() => this.$router.push('/'))
-      }
-    },
-    created () {
-      this.$emit('ready')
     }
+  },
+  methods: {
+    register () {
+      this.$store.dispatch('registerUserWithEmailAndPassword', this.form)
+      // .then(() => this.$router.push('/'))
+    }
+  },
+  created () {
+    this.$emit('ready')
   }
+}
 </script>
 
 <style scoped>
