@@ -43,6 +43,15 @@ export default {
         return dispatch('createUser', {id: user.user.uid, email, name, username, password, avatar})
       })
   },
+  signInWithEmailAndPassword (context, {email, password}) {
+    return firebase.auth().signInWithEmailAndPassword(email, password)
+  },
+  signOut ({commit}) {
+    return firebase.auth().signOut()
+      .then(() => {
+        commit('SET_AUTH_ID', null)
+      })
+  },
   updateThread ({state, commit, dispatch}, {title, text, id}) {
     return new Promise((resolve, reject) => {
       const thread = state.threads[id]
