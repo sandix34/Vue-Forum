@@ -24,6 +24,9 @@ export default {
     item['.key'] = id
     Vue.set(state[resource], id, item)
   },
+  SET_AUTH_ID (state, id) {
+    state.authId = id
+  },
   APPEND_POST_TO_THREAD: makeAppendChildToParentMutation({parent: 'threads', child: 'posts'}),
   APPEND_CONTRIBUTOR_TO_THREAD: makeAppendChildToParentMutation({parent: 'threads', child: 'contributors'}),
   APPEND_POST_TO_USER: makeAppendChildToParentMutation({parent: 'users', child: 'posts'}),
