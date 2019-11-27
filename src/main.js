@@ -26,13 +26,6 @@ const config = {
 // Initialize Firebase
 firebase.initializeApp(config)
 
-// to get the authenticated user from Firebase, which is to use the onAuthStateChanged observer
-firebase.auth().onAuthStateChanged(user => {
-  if (user) {
-    store.dispatch('fetchAuthUser')
-  }
-})
-
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
