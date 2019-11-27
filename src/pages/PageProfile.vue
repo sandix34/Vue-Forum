@@ -1,6 +1,7 @@
 <template>
   <div class="flex-grid">
-     <UserProfileCard
+    <h1>My Profile</h1>
+    <!-- <UserProfileCard
       v-if="!edit"
       :user="user"
     /> 
@@ -17,7 +18,7 @@
       </div>
       <hr>
       <PostList :posts="userPosts"/>
-    </div>
+    </div> -->
   </div>
 </template>
 
@@ -26,6 +27,7 @@
     import {mapGetters} from 'vuex'
     import UserProfileCard from '@/components/UserProfileCard'
     import UserProfileCardEditor from '@/components/UserProfileCardEditor'
+    import store from '@/store' // for the beforeRouteEnter who does not have access to the component instance
     
     export default {
       components: {
@@ -50,6 +52,17 @@
           }
           return []
         }
+      },
+      // protect the profile page from guests, redirect the users to the home page if not authenticated
+      beforeRouteEnter (to, from, next) {
+        if (store.state.authId) {
+          next()
+        } else {
+          next({name: 'Home'})
+        }
+      },
+      created () {
+        this.$emit('ready')
       }
     }
 </script>
