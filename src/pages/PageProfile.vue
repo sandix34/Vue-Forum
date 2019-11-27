@@ -27,7 +27,6 @@
     import {mapGetters} from 'vuex'
     import UserProfileCard from '@/components/UserProfileCard'
     import UserProfileCardEditor from '@/components/UserProfileCardEditor'
-    import store from '@/store' // for the beforeRouteEnter who does not have access to the component instance
     
     export default {
       components: {
@@ -51,14 +50,6 @@
               .filter(post => post.userId === this.user['.key'])
           }
           return []
-        }
-      },
-      // protect the profile page from guests, redirect the users to the home page if not authenticated
-      beforeRouteEnter (to, from, next) {
-        if (store.state.authId) {
-          next()
-        } else {
-          next({name: 'Home'})
         }
       },
       created () {
