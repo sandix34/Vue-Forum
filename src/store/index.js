@@ -15,7 +15,7 @@ export default new Vuex.Store({
     threads: {},
     posts: {},
     users: {},
-    authId: 'something'
+    authId: null
   },
   getters,
   actions,
