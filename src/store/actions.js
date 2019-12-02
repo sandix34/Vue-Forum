@@ -1,6 +1,7 @@
 import firebase from 'firebase/app'
 import 'firebase/database'
 import 'firebase/auth'
+import {removeEmptyProperties} from '@/utils'
 
 export default {
   createUser ({state, commit}, {id, email, name, username, avatar = null}) {
@@ -106,7 +107,24 @@ export default {
     })
   },
   updateUser ({commit}, user) {
-    commit('SET_USER', {userId: user['.key'], user})
+    const updates = {
+      avatar: user.avatar,
+      username: user.username,
+      name: user.name,
+      bio: user.bio,
+      website: user.website,
+      email: user.email,
+      location: user.location
+    }
+    return new Promise((resolve, reject) => {
+      // upadate in firebase and pass it the updates object
+      firebase.database().ref('users').child(user['.key']).update(removeEmptyProperties(updates))
+        // When the update is complete
+        .then(() => {
+          commit('SET_USER', {userId: user['.key'], user})
+          resolve(user)
+        })
+    })
   },
   initAuthentication ({dispatch, commit, state}) {
     return new Promise((resolve, reject) => {
