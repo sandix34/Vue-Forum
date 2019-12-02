@@ -6,6 +6,7 @@ import {makeAppendChildToParentMutation} from '@/store/assetHelpers'
 import {countObjectProperties} from '@/utils'
 
 export default {
+  namespaced: true,
   state: {
     items: {} // access the threads outside of the module state.threads.items[id]
   },
@@ -46,14 +47,14 @@ export default {
           })
       })
     },
-    updateThread ({state, commit, dispatch}, {title, text, id}) {
+    updateThread ({state, commit, dispatch, rootState}, {title, text, id}) {
       return new Promise((resolve, reject) => {
         const thread = state.items[id]
-        const post = state.posts[thread.firstPostId]
+        const post = rootState.posts.items[thread.firstPostId]
 
         const edited = {
           at: Math.floor(Date.now() / 1000),
-          by: state.authId
+          by: rootState.auth.authId
         }
 
         const updates = {}
@@ -63,13 +64,13 @@ export default {
         firebase.database().ref().update(updates)
           .then(() => {
             commit('SET_THREAD', {thread: {...thread, title}, threadId: id})
-            commit('posts/SET_POST', {postId: thread.firstPostId, post: { ...post, text }, edited})
+            commit('posts/SET_POST', {postId: thread.firstPostId, post: { ...post, text }, edited}, {root: true})
             resolve(post)
           })
       })
     },
-    fetchThread: ({dispatch}, {id}) => dispatch('fetchItem', {resource: 'threads', id, emoji: '📄'}),
-    fetchThreads: ({dispatch}, {ids}) => dispatch('fetchItems', {resource: 'threads', ids, emoji: '🌧'})
+    fetchThread: ({dispatch}, {id}) => dispatch('fetchItem', {resource: 'threads', id, emoji: '📄'}, {root: true}),
+    fetchThreads: ({dispatch}, {ids}) => dispatch('fetchItems', {resource: 'threads', ids, emoji: '🌧'}, {root: true})
   },
   mutations: {
     SET_THREAD (state, {thread, threadId}) {

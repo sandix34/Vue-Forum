@@ -13,7 +13,7 @@ import asyncDataStatus from '@/mixins/asyncDataStatus'
 export default {
   computed: {
     categories () {
-      return Object.values(this.$store.state.categories)
+      return Object.values(this.$store.state.categories.items)
     }
   },
   mixins: [asyncDataStatus],
@@ -21,7 +21,8 @@ export default {
     CategoryList
   },
   methods: {
-    ...mapActions(['fetchAllCategories', 'fetchForums'])
+    ...mapActions('categories', ['fetchAllCategories']),
+    ...mapActions('forums', ['fetchForums'])
   },
   created () {
     this.fetchAllCategories()

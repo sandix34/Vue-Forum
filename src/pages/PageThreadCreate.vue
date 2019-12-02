@@ -33,7 +33,7 @@ export default {
   },
   computed: {
     forum () {
-      return this.$store.state.forums[this.forumId]
+      return this.$store.state.forums.items[this.forumId]
     },
     // check if the title or the text has a value
     hasUnsavedChanges () {
@@ -41,7 +41,8 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['fetchForum', 'createThread']),
+    ...mapActions('threads', ['createThread']),
+    ...mapActions('forums', ['fetchForum']),
     save ({title, text}) {
       // dispatch action
       this.createThread({

@@ -65,7 +65,7 @@ export default {
   },
   mutations: {
     SET_USER (state, {user, userId}) {
-      Vue.set(state.users, userId, user)
+      Vue.set(state.items, userId, user)
     },
     APPEND_POST_TO_USER: makeAppendChildToParentMutation({parent: 'users', child: 'posts'}),
     APPEND_THREAD_TO_USER: makeAppendChildToParentMutation({parent: 'users', child: 'threads'})
